@@ -272,6 +272,10 @@ export default function Dashboard({ goTo, medecin, user }) {
                               x.id === id ? { ...x, reponse: rep, repondu: true } : x
                             ))
                           }}
+                          onDelete={async () => {
+                            await supabase.from('questions').delete().eq('id', q.id)
+                            setQuestions(prev => prev.filter(x => x.id !== q.id))
+                          }}
                         />
                       ))}
                     </div>
@@ -580,7 +584,7 @@ function FichesOnglet({ medecin }) {
   )
 }
 
-function QuestionPreview({ question, medecin, expanded, onToggle, onUpdate }) {
+function QuestionPreview({ question, medecin, expanded, onToggle, onUpdate, onDelete }) {
   const [reponse, setReponse] = useState('')
   const [sending, setSending] = useState(false)
   const [focused, setFocused] = useState(false)
@@ -629,14 +633,19 @@ function QuestionPreview({ question, medecin, expanded, onToggle, onUpdate }) {
           </span>
           <span style={{ fontSize: '0.75rem', color: C.textSoft, marginLeft: 10 }}>{formatted}</span>
         </div>
-        <span style={{
-          fontSize: '0.72rem', fontWeight: 700, padding: '3px 12px',
-          borderRadius: 20,
-          background: question.repondu ? '#e8f8ee' : '#fff0f0',
-          color: question.repondu ? '#00783c' : '#cc0000',
-        }}>
-          {question.repondu ? 'Répondu' : 'Non répondu'}
-        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{
+            fontSize: '0.72rem', fontWeight: 700, padding: '3px 12px',
+            borderRadius: 20,
+            background: question.repondu ? '#e8f8ee' : '#fff0f0',
+            color: question.repondu ? '#00783c' : '#cc0000',
+          }}>
+            {question.repondu ? 'Répondu' : 'Non répondu'}
+          </span>
+          <button onClick={onDelete}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.78rem', color: '#cc0000', padding: 4 }}
+          >🗑️</button>
+        </div>
       </div>
 
       {/* Aperçu ou contenu complet */}
