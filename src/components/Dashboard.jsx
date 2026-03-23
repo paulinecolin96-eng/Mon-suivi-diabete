@@ -401,7 +401,8 @@ function FichesOnglet({ medecin }) {
     if (!nouvelleFiche.titre || !nouvelleFiche.categorie || !nouvelleFiche.fichier) return
     setUploading(true)
     const fichier = nouvelleFiche.fichier
-    const fileName = `${medecin.id}/${Date.now()}_${fichier.name}`
+    const cleanName = fichier.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9._-]/g, '_')
+    const fileName = `${medecin.id}/${Date.now()}_${cleanName}`
     const { error: uploadError } = await supabase.storage.from('fiches').upload(fileName, fichier)
     if (uploadError) { setUploading(false); return }
     const { data: { publicUrl } } = supabase.storage.from('fiches').getPublicUrl(fileName)
@@ -431,7 +432,8 @@ function FichesOnglet({ medecin }) {
   }
 
   const handleReplacePdf = async (id, file) => {
-    const fileName = `${medecin.id}/${Date.now()}_${file.name}`
+    const cleanName = file.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9._-]/g, '_')
+    const fileName = `${medecin.id}/${Date.now()}_${cleanName}`
     const { error } = await supabase.storage.from('fiches').upload(fileName, file)
     if (error) return
     const { data: { publicUrl } } = supabase.storage.from('fiches').getPublicUrl(fileName)
