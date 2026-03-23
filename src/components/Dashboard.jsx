@@ -601,12 +601,13 @@ function QuestionPreview({ question, medecin, expanded, onToggle, onUpdate }) {
       .eq('id', question.id)
 
     await supabase.functions.invoke('send-reply', {
-      body: {
+      body: JSON.stringify({
         email_patient: question.email_patient,
         prenom_patient: question.prenom_patient,
         nom_medecin: medecin.nom,
         reponse,
-      }
+      }),
+      headers: { 'Content-Type': 'application/json' },
     })
 
     onUpdate(question.id, reponse)

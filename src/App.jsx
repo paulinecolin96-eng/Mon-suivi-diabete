@@ -129,7 +129,7 @@ export default function App() {
         </div>
       )}
 
-      <Footer />
+      <Footer medecin={medecin} />
     </div>
   )
 }
