@@ -43,7 +43,7 @@ export default function ContactForm({ medecin }) {
 
   return (
     <section>
-      <SectionTitle num="3" title="Questions · Réponses" sub="Envoyez votre question — réponse sous 48h" color={C.magenta} />
+      <SectionTitle title="Questions · Réponses" sub="Envoyez votre question — réponse sous 48h" color={C.magenta} />
 
       <div style={{ background: 'rgba(255,255,255,0.55)', backdropFilter: 'blur(12px)', borderRadius: 16, border: '1.5px solid rgba(0,30,90,0.12)', boxShadow: '0 4px 24px rgba(0,0,0,0.08)', overflow: 'hidden' }}>
 

@@ -10,6 +10,7 @@ export default function LoginPraticien({ goTo, setUser, setMedecin }) {
   const [erreur, setErreur] = useState('')
   const [loading, setLoading] = useState(false)
   const [focused, setFocused] = useState({})
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -64,7 +65,7 @@ export default function LoginPraticien({ goTo, setUser, setMedecin }) {
 
   const inputStyle = (name) => ({
     width: '100%', padding: '11px 14px',
-    border: `1.5px solid ${focused[name] ? '#6b21a8' : '#ccc'}`,
+    border: `1.5px solid ${focused[name] ? '#d25a00' : '#ccc'}`,
     borderRadius: 10, fontSize: '0.87rem',
     fontFamily: "'Barlow', sans-serif",
     color: C.blue, outline: 'none',
@@ -96,16 +97,16 @@ export default function LoginPraticien({ goTo, setUser, setMedecin }) {
           onClick={() => goTo('home')}
           style={{
             display: 'inline-flex', alignItems: 'center', gap: 8,
-            background: 'rgba(255,255,255,0.6)', border: '1.5px solid #6b21a8',
+            background: 'rgba(255,255,255,0.6)', border: '1.5px solid #d25a00',
             borderRadius: 10, backdropFilter: 'blur(8px)',
             padding: '8px 18px', fontSize: '0.82rem', fontWeight: 600,
             fontFamily: "'Barlow Condensed', sans-serif",
-            color: '#6b21a8', cursor: 'pointer', marginBottom: 24,
+            color: '#d25a00', cursor: 'pointer', marginBottom: 24,
             letterSpacing: '0.04em', textTransform: 'uppercase',
             transition: 'all 0.18s',
           }}
-          onMouseEnter={e => { e.currentTarget.style.background = '#6b21a8'; e.currentTarget.style.color = '#fff' }}
-          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.6)'; e.currentTarget.style.color = '#6b21a8' }}
+          onMouseEnter={e => { e.currentTarget.style.background = '#d25a00'; e.currentTarget.style.color = '#fff' }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.6)'; e.currentTarget.style.color = '#d25a00' }}
         >
           ← Retour
         </button>
@@ -123,13 +124,13 @@ export default function LoginPraticien({ goTo, setUser, setMedecin }) {
             <div style={{
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
               width: 56, height: 56, borderRadius: 14,
-              background: '#6b21a8', marginBottom: 14,
+              background: '#d25a00', marginBottom: 14,
             }}>
               <span style={{ fontSize: '1.8rem' }}>🩺</span>
             </div>
             <div style={{
               fontFamily: "'Barlow Condensed', sans-serif", fontSize: '1.4rem',
-              fontWeight: 800, color: '#6b21a8', textTransform: 'uppercase',
+              fontWeight: 800, color: '#d25a00', textTransform: 'uppercase',
               letterSpacing: '0.05em',
             }}>
               Espace Praticien
@@ -142,15 +143,15 @@ export default function LoginPraticien({ goTo, setUser, setMedecin }) {
           {/* Onglets */}
           <div style={{
             display: 'flex', gap: 4, marginBottom: 24,
-            background: '#f0e8ff', borderRadius: 10, padding: 4,
+            background: '#fdf3ec', borderRadius: 10, padding: 4,
           }}>
             {[['connexion', 'Connexion'], ['inscription', 'Créer un compte']].map(([key, label]) => (
               <button key={key}
                 onClick={() => { setOnglet(key); setErreur('') }}
                 style={{
                   flex: 1, padding: '8px 12px',
-                  background: onglet === key ? '#6b21a8' : 'transparent',
-                  color: onglet === key ? C.white : '#6b21a8',
+                  background: onglet === key ? '#d25a00' : 'transparent',
+                  color: onglet === key ? C.white : '#d25a00',
                   border: 'none', borderRadius: 8,
                   fontFamily: "'Barlow Condensed', sans-serif",
                   fontSize: '0.85rem', fontWeight: 700,
@@ -174,12 +175,19 @@ export default function LoginPraticien({ goTo, setUser, setMedecin }) {
                 style={inputStyle('email')} placeholder="votre@email.fr"
               />
               <label style={labelStyle}>Mot de passe</label>
-              <input type="password" value={password} required
-                onChange={e => setPassword(e.target.value)}
-                onFocus={() => setFocused(p => ({ ...p, pass: true }))}
-                onBlur={() => setFocused(p => ({ ...p, pass: false }))}
-                style={inputStyle('pass')} placeholder="••••••••"
-              />
+              <div style={{ position: 'relative', marginBottom: 14 }}>
+                <input type={showPassword ? 'text' : 'password'} value={password} required
+                  onChange={e => setPassword(e.target.value)}
+                  onFocus={() => setFocused(p => ({ ...p, pass: true }))}
+                  onBlur={() => setFocused(p => ({ ...p, pass: false }))}
+                  style={{ ...inputStyle('pass'), marginBottom: 0, paddingRight: 44 }} placeholder="••••••••"
+                />
+                <button type="button" onClick={() => setShowPassword(!showPassword)}
+                  style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'transparent', border: 'none', cursor: 'pointer', color: '#5a6070', fontSize: '1.1rem', padding: 0 }}
+                >
+                  {showPassword ? '👁️‍🗨️' : '👁️'}
+                </button>
+              </div>
               {erreur && (
                 <div style={{ fontSize: '0.78rem', color: '#cc0000', marginBottom: 14 }}>
                   {erreur}
@@ -188,7 +196,7 @@ export default function LoginPraticien({ goTo, setUser, setMedecin }) {
               <button type="submit" disabled={loading}
                 style={{
                   width: '100%', padding: 12,
-                  background: '#6b21a8', color: C.white,
+                  background: '#d25a00', color: C.white,
                   border: 'none', borderRadius: 10,
                   fontFamily: "'Barlow Condensed', sans-serif",
                   fontSize: '0.95rem', fontWeight: 700,
@@ -196,8 +204,8 @@ export default function LoginPraticien({ goTo, setUser, setMedecin }) {
                   cursor: loading ? 'not-allowed' : 'pointer',
                   transition: 'background 0.18s',
                 }}
-                onMouseEnter={e => { if (!loading) e.currentTarget.style.background = '#7c3aed' }}
-                onMouseLeave={e => { if (!loading) e.currentTarget.style.background = '#6b21a8' }}
+                onMouseEnter={e => { if (!loading) e.currentTarget.style.background = '#a84400' }}
+                onMouseLeave={e => { if (!loading) e.currentTarget.style.background = '#d25a00' }}
               >
                 {loading ? 'Connexion…' : 'Se connecter'}
               </button>
@@ -222,12 +230,19 @@ export default function LoginPraticien({ goTo, setUser, setMedecin }) {
                 style={inputStyle('email2')} placeholder="votre@email.fr"
               />
               <label style={labelStyle}>Mot de passe</label>
-              <input type="password" value={password} required
-                onChange={e => setPassword(e.target.value)}
-                onFocus={() => setFocused(p => ({ ...p, pass2: true }))}
-                onBlur={() => setFocused(p => ({ ...p, pass2: false }))}
-                style={inputStyle('pass2')} placeholder="••••••••"
-              />
+              <div style={{ position: 'relative', marginBottom: 14 }}>
+                <input type={showPassword ? 'text' : 'password'} value={password} required
+                  onChange={e => setPassword(e.target.value)}
+                  onFocus={() => setFocused(p => ({ ...p, pass2: true }))}
+                  onBlur={() => setFocused(p => ({ ...p, pass2: false }))}
+                  style={{ ...inputStyle('pass2'), marginBottom: 0, paddingRight: 44 }} placeholder="••••••••"
+                />
+                <button type="button" onClick={() => setShowPassword(!showPassword)}
+                  style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'transparent', border: 'none', cursor: 'pointer', color: '#5a6070', fontSize: '1.1rem', padding: 0 }}
+                >
+                  {showPassword ? '👁️‍🗨️' : '👁️'}
+                </button>
+              </div>
               {erreur && (
                 <div style={{ fontSize: '0.78rem', color: '#cc0000', marginBottom: 14 }}>
                   {erreur}
@@ -236,7 +251,7 @@ export default function LoginPraticien({ goTo, setUser, setMedecin }) {
               <button type="submit" disabled={loading}
                 style={{
                   width: '100%', padding: 12,
-                  background: '#6b21a8', color: C.white,
+                  background: '#d25a00', color: C.white,
                   border: 'none', borderRadius: 10,
                   fontFamily: "'Barlow Condensed', sans-serif",
                   fontSize: '0.95rem', fontWeight: 700,
@@ -244,8 +259,8 @@ export default function LoginPraticien({ goTo, setUser, setMedecin }) {
                   cursor: loading ? 'not-allowed' : 'pointer',
                   transition: 'background 0.18s',
                 }}
-                onMouseEnter={e => { if (!loading) e.currentTarget.style.background = '#7c3aed' }}
-                onMouseLeave={e => { if (!loading) e.currentTarget.style.background = '#6b21a8' }}
+                onMouseEnter={e => { if (!loading) e.currentTarget.style.background = '#a84400' }}
+                onMouseLeave={e => { if (!loading) e.currentTarget.style.background = '#d25a00' }}
               >
                 {loading ? 'Création…' : 'Créer mon compte'}
               </button>
