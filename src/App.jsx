@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { C } from './constants'
+import { supabase } from './supabase'
 import Home from './components/Home'
 import LoginPraticien from './components/LoginPraticien'
 import Dashboard from './components/Dashboard'
@@ -22,9 +23,35 @@ export default function App() {
   const [onglet, setOnglet] = useState('accueil')
   const [medecin, setMedecin] = useState(null)
   const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  // Restaurer la session au chargement
+  useEffect(() => {
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      if (session?.user) {
+        const { data: med } = await supabase
+          .from('medecins').select('*')
+          .eq('email', session.user.email).single()
+        if (med) {
+          setUser(session.user)
+          setMedecin(med)
+          setPage('dashboard')
+        }
+      }
+      setLoading(false)
+    })
+  }, [])
 
   const goTo = (p) => { setPage(p); window.scrollTo({ top: 0 }) }
   const goOnglet = (o) => { setOnglet(o); window.scrollTo({ top: 0 }) }
+
+  if (loading) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#ddd8d0' }}>
+        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: '1.2rem', color: '#001e5a' }}>Chargement…</div>
+      </div>
+    )
+  }
 
   if (page === 'home') {
     return <Home goTo={goTo} setMedecin={setMedecin} />
